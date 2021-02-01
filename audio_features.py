@@ -53,10 +53,9 @@ def audio_features(path,hop_length=512):
     # Compute MFCC (20)
     mfcc = librosa.feature.mfcc(y=y, sr=sr).T
     
-    #time vector ToDo
-    #t = np.arange(0 , len(y)/sr , 1/sr) #here the step is 1/sr
-    t2 = np.linspace(0, len(y)/sr, len(spectral_centroid)) #here there are fixed num of steps 
-    # ToDo, maybe steps = len(y)//hop_length more genereal
+    #time vector
+    t2 = np.linspace(0, len(y)/sr, len(spectral_centroid)) #fixed num of steps assuming all features have the same length
+    #TODO  steps = len(y)//hop_length+1 more genereal
     
     # Collect in pandas dataframe
     feature_array = [t2, spectral_centroid, rolloff, rms, spec_bw, flatness, zcr, mfcc]
