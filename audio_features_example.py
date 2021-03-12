@@ -27,11 +27,11 @@ path = librosa.ex('nutcracker')
 # y = audio; sr = sample rate; df = pandas dataframe containing a time vectore and 26 audio features
 y, sr, df = audio_features(path)
 
-#%% Plot waveform and 3 audio features
+#%% Plot waveform and 4 audio features
 
 librosa.display.waveplot(y, sr=sr, alpha=0.4)
 plt.plot(df['time'].values, normalize(df['spectral_centroid']), color='r')
 plt.plot(df['time'].values, normalize(df['rolloff']), color='g')
 plt.plot(df['time'].values, normalize(df['rms']), color='m')
-
+plt.plot(df['time'].values, normalize(df['contrast']), color='y')
 
