@@ -53,12 +53,17 @@ def audio_features(path,hop_length=512):
     # Compute MFCC (20)
     mfcc = librosa.feature.mfcc(y=y, sr=sr).T
     
+    # Compute spectral contrast
+    contrast = librosa.feature.spectral_contrast(y=y,
+                                                 sr=sr)[0]
+    
+    
     #time vector
     t2 = np.linspace(0, len(y)/sr, len(spectral_centroid)) #fixed num of steps assuming all features have the same length
     #TODO  steps = len(y)//hop_length+1 more genereal
     
     # Collect in pandas dataframe
-    feature_array = [t2, spectral_centroid, rolloff, rms, spec_bw, flatness, zcr, mfcc]
+    feature_array = [t2, spectral_centroid, rolloff, rms, spec_bw, flatness, zcr, mfcc, contrast]
     
     feature_index = ['time',
                      'spectral_centroid',
@@ -67,7 +72,8 @@ def audio_features(path,hop_length=512):
                      'spec_bw',
                      'flatness',
                      'zcr',
-                     'mfcc']
+                     'mfcc',
+                     'contrast']
     
     df = pd.DataFrame(data=feature_array,
                         index=feature_index).T
