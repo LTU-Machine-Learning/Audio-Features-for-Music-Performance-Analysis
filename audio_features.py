@@ -88,6 +88,19 @@ def audio_features(path,hop_length=512):
     #Add MFCCs to DataFrame
     df = df.join(df_mfcc)
     
+    #%% Add derivatives
+    
+    orders = [1, 2, 3]
+    df_deltas = pd.DataFrame()
+    
+    for order in orders:
+        for col in df.columns[1:]: #skipping time
+            deltas = librosa.feature.delta(df[col].values, order=order)
+            df_temp = pd.DataFrame(deltas, columns=[col + '_delta' + str(order)])
+            df_deltas = pd.concat([df_deltas, df_temp], axis = 1 )
+    
+    df = df.join(df_deltas)
+    
     return y, sr, df
 
 
