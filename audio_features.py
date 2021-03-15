@@ -50,20 +50,20 @@ def audio_features(path,hop_length=512):
     # Compute zero-crossing rate
     zcr = librosa.feature.zero_crossing_rate(y)[0]
     
-    # Compute MFCC (20)
+    # Compute MFCCs (20)
     mfcc = librosa.feature.mfcc(y=y, sr=sr).T
     
     # Compute spectral contrast
     contrast = librosa.feature.spectral_contrast(y=y,
                                                  sr=sr)[0]
     
-    
-    #time vector
+    # Time vector
     t2 = np.linspace(0, len(y)/sr, len(spectral_centroid)) #fixed num of steps assuming all features have the same length
     #TODO  steps = len(y)//hop_length+1 more genereal
     
-    # Collect in pandas dataframe
-    feature_array = [t2, spectral_centroid, rolloff, rms, spec_bw, flatness, zcr, mfcc, contrast]
+    
+    #%% Collect in pandas dataframe except MFCCs       
+    feature_array = [t2, spectral_centroid, rolloff, rms, spec_bw, flatness, zcr, contrast]
     
     feature_index = ['time',
                      'spectral_centroid',
@@ -72,11 +72,22 @@ def audio_features(path,hop_length=512):
                      'spec_bw',
                      'flatness',
                      'zcr',
-                     'mfcc',
                      'contrast']
+    
     
     df = pd.DataFrame(data=feature_array,
                         index=feature_index).T
+    
+    #MFCCs in separate columns   
+    mfcc_col_names = []
+    for i in range(np.size(mfcc, axis=1)):
+        mfcc_col_names.append('mfcc_'+str(i))
+    
+    df_mfcc = pd.DataFrame(mfcc, columns=mfcc_col_names)
+    
+    #Add MFCCs to DataFrame
+    df = df.join(df_mfcc)
+    
     return y, sr, df
 
 
