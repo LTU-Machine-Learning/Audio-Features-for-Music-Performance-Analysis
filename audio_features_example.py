@@ -35,3 +35,5 @@ plt.plot(df['time'].values, normalize(df['rolloff']), color='g')
 plt.plot(df['time'].values, normalize(df['rms']), color='m')
 plt.plot(df['time'].values, normalize(df['contrast']), color='y')
 
+#%% Save audio features as csv file
+df.to_csv('audio_features.csv', index=False)
